@@ -1,0 +1,67 @@
+<!doctype html>
+
+<head>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            background-color: #00ff00;
+            display: flex;
+            height: 100vh;
+            justify-content:center;
+            align-items: flex-end;
+            
+        }
+
+        p{
+            margin-bottom: 4rem;
+            font-size: 40px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bolder;
+            color: white;
+            text-shadow: -2.5px 2.5px 0px black;
+            -webkit-text-stroke: .5px black;
+            user-select: none;
+        }
+
+        .w-50{
+            width: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="w-50">
+        <p id="text"></p>
+    </div>
+    <script>
+        speechRecognition = new webkitSpeechRecognition();
+        speechRecognition.continuous = true;
+        speechRecognition.interimResults = true;
+        speechRecognition.start();
+        elementText = document.getElementById('text')
+        speechRecognition.onresult = function (event) {
+
+            if (typeof (event.results) == 'undefined') {
+                speechRecognition.stop();
+                return;
+            }
+            for (var i = event.resultIndex; i < event.results.length; ++i) {
+                if (event.results[i].isFinal) {
+                    let speech_text = event.results[i][0].transcript
+                    elementText.textContent += speech_text;
+                    let sentenceSize = elementText.textContent.split(' ').length
+                    if(sentenceSize > 18){
+                        elementText.textContent = ""
+                    }
+                }
+            }
+
+        };
+
+    </script>
+</body>
+
+</html>
